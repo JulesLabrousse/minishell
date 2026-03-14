@@ -6,7 +6,7 @@
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 15:08:28 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/14 15:08:29 by jlabrous         ###   ########.fr       */
+/*   Updated: 2026/03/14 17:54:22 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ int	new_segment(t_segment_data data, t_segment **segment, t_lex_error *err)
 			err->type = LEX_ERR_NOMEM, err->err_no = errno, 1);
 	i = 0;
 	while (i < data.len)
-		(*segment)->text[i] = data.start[i++];
+	{
+		(*segment)->text[i] = data.start[i];
+		i++;
+	}
 	(*segment)->text[data.len] = '\0';
 	(*segment)->quote = data.quote;
 	(*segment)->next = NULL;

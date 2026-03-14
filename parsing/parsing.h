@@ -4,7 +4,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <errno.h>
-# include "lexing.h"
+# include "../lexing/lexing.h"
 
 typedef struct s_heredoc
 {
