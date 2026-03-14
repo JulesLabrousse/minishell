@@ -42,11 +42,11 @@ int	new_redir(t_operator_type type, t_segment *segments, t_redir **redir,
 	(*redir)->next = NULL;
 	if (type == OP_HEREDOC)
 	{
-		(*redir)->u_data.heredoc.delim = segments;
-		(*redir)->u_data.heredoc.fd = -1;
+		(*redir)->heredoc.delim = segments;
+		(*redir)->heredoc.fd = -1;
 	}
 	else
-		(*redir)->u_data.target = segments;
+		(*redir)->target = segments;
 	return (0);
 }
 

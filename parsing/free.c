@@ -34,12 +34,12 @@ void	free_redirs(t_redir *current)
 		next = current->next;
 		if (current->type == OP_HEREDOC)
 		{
-			free_segments(current->u_data.heredoc.delim);
-			if (current->u_data.heredoc.fd >= 0)
-				close(current->u_data.heredoc.fd);
+			free_segments(current->heredoc.delim);
+			if (current->heredoc.fd >= 0)
+				close(current->heredoc.fd);
 		}
 		else
-			free_segments(current->u_data.target);
+			free_segments(current->target);
 		free(current);
 		current = next;
 	}
