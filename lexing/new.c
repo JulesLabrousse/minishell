@@ -19,11 +19,11 @@ int	new_segment(t_segment_data data, t_segment **segment, t_lex_error *err)
 	*segment = NULL;
 	*segment = malloc(sizeof(t_segment));
 	if (!*segment)
-		return (err->type = LEX_ERR_NOMEM, err->err_no = errno, 1);
+		return (err->type = LEX_ERR_NOMEM, err->saved_errno = errno, 1);
 	(*segment)->text = malloc(sizeof(char) * (data.len + 1));
 	if (!(*segment)->text)
 		return (free(*segment), *segment = NULL,
-			err->type = LEX_ERR_NOMEM, err->err_no = errno, 1);
+			err->type = LEX_ERR_NOMEM, err->saved_errno = errno, 1);
 	i = 0;
 	while (i < data.len)
 	{
@@ -41,7 +41,7 @@ int	new_word_token(t_segment *segments, t_token **token, t_lex_error *err)
 	*token = NULL;
 	*token = malloc(sizeof(t_token));
 	if (!*token)
-		return (err->type = LEX_ERR_NOMEM, err->err_no = errno, 1);
+		return (err->type = LEX_ERR_NOMEM, err->saved_errno = errno, 1);
 	(*token)->type = TOK_WORD;
 	(*token)->segments = segments;
 	(*token)->next = NULL;
@@ -54,7 +54,7 @@ int	new_operator_token(t_operator_type operator, t_token **token,
 	*token = NULL;
 	*token = malloc(sizeof(t_token));
 	if (!*token)
-		return (err->type = LEX_ERR_NOMEM, err->err_no = errno, 1);
+		return (err->type = LEX_ERR_NOMEM, err->saved_errno = errno, 1);
 	(*token)->type = TOK_OPERATOR;
 	(*token)->operator = operator;
 	(*token)->next = NULL;

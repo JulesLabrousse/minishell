@@ -70,7 +70,7 @@ typedef struct s_lex_error
 	union
 	{
 		t_quote_type	quote;
-		int				err_no;
+		int				saved_errno;
 	};
 }	t_lex_error;
 
