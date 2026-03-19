@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/19 03:51:10 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/19 03:51:11 by jlabrous         ###   ########.fr       */
+/*   Created: 2026/03/19 04:09:46 by jlabrous          #+#    #+#             */
+/*   Updated: 2026/03/19 04:09:47 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heredoc.h"
+#include "minishell.h"
 
 static void	sigint_interactive(int sig)
 {

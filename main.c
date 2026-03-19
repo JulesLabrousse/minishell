@@ -5,15 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/14 17:50:04 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/19 03:53:18 by jlabrous         ###   ########.fr       */
+/*   Created: 2026/03/19 04:28:21 by jlabrous          #+#    #+#             */
+/*   Updated: 2026/03/19 04:28:22 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <readline/readline.h>
+#include "minishell.h"
 #include <readline/history.h>
 #include "lexing/lexing.h"
 #include "parsing/parsing.h"
@@ -92,42 +89,6 @@ static int	handle_line(char *line, t_shell *shell)
 		return (1);
 	/* expansions + execution */
 	free_commands(commands);
-		*last_status = 2;
-		return (1);
-	}
-	free_commands(commands);
-	free_tokens(tokens);
-	return (0);
-}
-
-int	main(void)
-{
-	char	*line;
-	int		last_status;
-
-	last_status = 0;
-	while (1)
-	{
-		setup_interactive_signals();
-		line = readline("minishell$ ");
-		if (g_signal == SIGINT)
-		{
-			last_status = 130;
-			g_signal = 0;
-		}
-		if (line == NULL)
-		{
-			write(1, "exit\n", 5);
-			break ;
-		}
-		if (*line != '\0')
-			add_history(line);
-		if (*line != '\0')
-			handle_line(line, &last_status);
-		free(line);
-	}
-	return (last_status);
-}
 	free_tokens(tokens);
 	return (0);
 }

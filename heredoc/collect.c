@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/19 03:54:52 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/19 03:54:54 by jlabrous         ###   ########.fr       */
+/*   Created: 2026/03/19 02:03:12 by jlabrous          #+#    #+#             */
+/*   Updated: 2026/03/19 04:19:13 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ static int	delim_to_str(t_segment *segments, char **result,
 	return (0);
 }
 
-int	collect_heredoc(t_redir *redir, t_shell *shell, t_heredoc_error *err)
+static int	collect_heredoc(t_redir *redir, t_shell *shell, t_heredoc_error *err)
 {
 	t_heredoc_ctx	ctx;
 
-	ctx.fd = next_available_fd(err);
+	ctx.fd = open_next_heredoc_fd(err);
 	if (ctx.fd < 0)
 		return (1);
 	ctx.expand = !is_delim_quoted(redir->heredoc.delim);

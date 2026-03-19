@@ -6,7 +6,7 @@
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 02:03:12 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/19 02:03:13 by jlabrous         ###   ########.fr       */
+/*   Updated: 2026/03/19 04:27:34 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_redir
 	{
 		t_segment	*target;
 		t_heredoc	heredoc;
-	}	u_data;
+	};
 	struct s_redir	*next;
 }	t_redir;
 

@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/19 03:51:57 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/19 03:51:58 by jlabrous         ###   ########.fr       */
+/*   Created: 2026/03/19 04:24:17 by jlabrous          #+#    #+#             */
+/*   Updated: 2026/03/19 04:24:19 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heredoc.h"
+#include "minishell.h"
 
 int	ft_isalnum(int c)
 {
@@ -53,8 +53,12 @@ char	*ft_strdup(const char *s)
 	if (!dup)
 		return (NULL);
 	i = 0;
-	while (i <= len)
-		dup[i] = s[i++];
+	while (i < len)
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	dup[len] = '\0';
 	return (dup);
 }
 
