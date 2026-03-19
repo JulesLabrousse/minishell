@@ -35,17 +35,48 @@ static int	process_heredoc_line(t_heredoc_ctx *ctx, char *line,
 	return (0);
 }
 
+static char	*read_heredoc_line(t_heredoc_error *err)
+{
+	char	*result;
+	char	*tmp;
+	char	buf[2];
+	int		ret;
+
+	result = ft_strdup("");
+	if (!result)
+		return (err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, NULL);
+	write(1, "> ", 2);
+	buf[1] = '\0';
+	while (1)
+	{
+		ret = read(STDIN_FILENO, &buf[0], 1);
+		if (ret <= 0 || buf[0] == '\n')
+			break ;
+		tmp = ft_strjoin(result, buf);
+		free(result);
+		if (!tmp)
+			return (err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, NULL);
+		result = tmp;
+	}
+	if (g_signal)
+		return (free(result), NULL);
+	if (ret == 0 && *result == '\0')
+		return (free(result), NULL);
+	return (result);
+}
+
 int	read_heredoc(t_heredoc_ctx *ctx, t_shell *shell, t_heredoc_error *err)
 {
 	char	*line;
 
 	while (1)
 	{
-		line = readline("> ");
+		line = read_heredoc_line(err);
 		if (g_signal)
-			return (0);
+			return (free(line), 0);
 		if (!line)
 		{
+			write(1, "\n", 1);
 			write(2, "minishell: warning: here-document delimited ", 44);
 			write(2, "by end-of-file (wanted `", 24);
 			write(2, ctx->delim, ft_strlen(ctx->delim));
