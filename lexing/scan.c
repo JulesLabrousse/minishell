@@ -24,8 +24,8 @@ int	scan_unquoted_segment(const char **input, t_segment **segments,
 		&& **input != '|' && **input != '<' && **input != '>'
 		&& **input != '\'' && **input != '"')
 		(*input)++;
-	data.start = (char *)start;
-	data.len = (size_t)(*input - start);
+	data.start = start;
+	data.len = *input - start;
 	data.quote = QU_NONE;
 	if (data.len == 0)
 		return (0);
@@ -53,8 +53,8 @@ int	scan_quoted_segment(const char **input, t_segment **segments,
 		(*input)++;
 	if (**input == '\0')
 		return (err->type = LEX_ERR_UNCLOSED_QUOTE, err->quote = quote, 1);
-	data.start = (char *)start;
-	data.len = (size_t)(*input - start);
+	data.start = start;
+	data.len = *input - start;
 	data.quote = quote;
 	if (new_segment(data, &segment, err))
 		return (1);

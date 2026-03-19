@@ -43,7 +43,7 @@ int	open_next_heredoc_fd(t_heredoc_error *err)
 		fill_hd_name(path, i);
 		fd = open(path, O_CREAT | O_EXCL | O_RDWR, 0600);
 		if (fd >= 0)
-			return (fd);
+			return (unlink(path), fd);
 		if (errno == EEXIST)
 			i++;
 		else

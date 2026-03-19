@@ -44,7 +44,8 @@ static int	delim_to_str(t_segment *segments, char **result,
 	return (0);
 }
 
-static int	collect_heredoc(t_redir *redir, t_shell *shell, t_heredoc_error *err)
+static int	collect_heredoc(t_redir *redir, t_shell *shell,
+	t_heredoc_error *err)
 {
 	t_heredoc_ctx	ctx;
 

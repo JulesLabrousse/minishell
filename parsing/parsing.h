@@ -6,7 +6,7 @@
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 02:03:12 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/19 04:27:34 by jlabrous         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:11:17 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,18 +88,19 @@ void	append_command(t_command **head, t_command *command);
 
 /* --- NEW --- */
 
-int	new_arg(t_segment *segments, t_arg **arg, t_parse_error *err);
-int	new_redir(t_operator_type type, t_segment *segments, t_redir **redir,
-		t_parse_error *err);
-int	new_command(t_redir *redirs, t_arg *args, t_command **command,
-		t_parse_error *err);
+int		new_arg(t_segment *segments, t_arg **arg, t_parse_error *err);
+int		new_redir(t_operator_type type, t_segment *segments, t_redir **redir,
+			t_parse_error *err);
+int		new_command(t_redir *redirs, t_arg *args, t_command **command,
+			t_parse_error *err);
 
 /* --- PARSER --- */
 
-int	parse_word(t_token **current, t_arg **args, t_parse_error *err);
-int	parse_redirections(t_token **current, t_redir **redirs, t_parse_error *err);
-int	parse_pipe(t_token **current, t_parse_error *err);
-int	parser(t_token *tokens, t_command **commands, t_parse_error *err);
+int		parse_word(t_token **current, t_arg **args, t_parse_error *err);
+int		parse_redirections(t_token **current, t_redir **redirs,
+			t_parse_error *err);
+int		parse_pipe(t_token **current, t_parse_error *err);
+int		parser(t_token *tokens, t_command **commands, t_parse_error *err);
 
 /* --- ERROR --- */
 

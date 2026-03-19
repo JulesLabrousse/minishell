@@ -25,5 +25,6 @@ void	print_parse_error(t_unexpected_token token)
 	else if (token == UNEXPECTED_APPEND)
 		write(2, "minishell: syntax error near unexpected token `>>'\n", 52);
 	else
-		write(2, "minishell: syntax error near unexpected token `newline'\n", 57);
+		write(2, "minishell: syntax error near unexpected token `newline'\n",
+			57);
 }

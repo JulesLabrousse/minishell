@@ -23,17 +23,17 @@
 
 extern volatile sig_atomic_t	g_signal;
 
-typedef struct s_var
+typedef struct s_env
 {
 	char			*name;
 	char			*value;
 	bool			exported;
-	struct s_var	*next;
-}	t_var;
+	struct s_env	*next;
+}	t_env;
 
 typedef struct s_shell
 {
-	t_var	*vars;
+	t_env	*vars;
 	int		last_status;
 }	t_shell;
 

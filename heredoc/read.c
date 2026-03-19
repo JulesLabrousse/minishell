@@ -42,8 +42,16 @@ int	read_heredoc(t_heredoc_ctx *ctx, t_shell *shell, t_heredoc_error *err)
 	while (1)
 	{
 		line = readline("> ");
-		if (g_signal || !line)
-			return (free(line), 0);
+		if (g_signal)
+			return (0);
+		if (!line)
+		{
+			write(2, "minishell: warning: here-document delimited ", 44);
+			write(2, "by end-of-file (wanted `", 24);
+			write(2, ctx->delim, ft_strlen(ctx->delim));
+			write(2, "')\n", 3);
+			return (0);
+		}
 		if (!ft_strncmp(line, ctx->delim, ft_strlen(ctx->delim) + 1))
 			return (free(line), 0);
 		if (process_heredoc_line(ctx, line, shell, err))

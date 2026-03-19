@@ -75,23 +75,28 @@ int	parser(t_token *tokens, t_command **commands, t_parse_error *err)
 		if (current->type == TOK_WORD)
 		{
 			if (parse_word(&current, &args, err))
-				return (free_redirs(redirs), free_args(args), 1);
+				return (free_commands(*commands), *commands = NULL,
+					free_redirs(redirs), free_args(args), 1);
 		}
 		else if (current->type == TOK_OPERATOR && current->operator != OP_PIPE)
 		{
 			if (parse_redirections(&current, &redirs, err))
-				return (free_redirs(redirs), free_args(args), 1);
+				return (free_commands(*commands), *commands = NULL,
+					free_redirs(redirs), free_args(args), 1);
 		}
 		else if (current->type == TOK_OPERATOR && current->operator == OP_PIPE)
 		{
 			if (args == NULL && redirs == NULL)
 				return (err->type = PARSE_ERR_SYNTAX,
 					err->unexpected = UNEXPECTED_PIPE,
+					free_commands(*commands), *commands = NULL,
 					free_redirs(redirs), free_args(args), 1);
 			if (parse_pipe(&current, err))
-				return (free_redirs(redirs), free_args(args), 1);
+				return (free_commands(*commands), *commands = NULL,
+					free_redirs(redirs), free_args(args), 1);
 			if (new_command(redirs, args, &command, err))
-				return (free_redirs(redirs), free_args(args), 1);
+				return (free_commands(*commands), *commands = NULL,
+					free_redirs(redirs), free_args(args), 1);
 			append_command(commands, command);
 			redirs = NULL;
 			args = NULL;

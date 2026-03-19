@@ -24,6 +24,7 @@ static void	sigint_heredoc(int sig)
 {
 	g_signal = sig;
 	write(1, "\n", 1);
+	rl_done = 1;
 }
 
 void	setup_interactive_signals(void)

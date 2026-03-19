@@ -6,7 +6,7 @@
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 04:24:17 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/19 04:24:19 by jlabrous         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:13:58 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ char	*ft_itoa(int n)
 	char	buf[12];
 	int		neg;
 	int		i;
+	int		digit;
 
 	neg = (n < 0);
 	i = 11;
@@ -117,7 +118,10 @@ char	*ft_itoa(int n)
 		buf[--i] = '0';
 	while (n != 0)
 	{
-		buf[--i] = '0' + (neg ? -(n % 10) : (n % 10));
+		digit = n % 10;
+		if (neg)
+			digit = -digit;
+		buf[--i] = '0' + digit;
 		n /= 10;
 	}
 	if (neg)

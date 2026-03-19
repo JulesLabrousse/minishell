@@ -35,7 +35,7 @@ static int	expand_var(char **pos, t_shell *shell, char **result,
 	char	*start;
 	char	*name;
 	char	*tmp;
-	t_var	*var;
+	t_env	*var;
 
 	start = *pos;
 	while (**pos && (ft_isalnum(**pos) || **pos == '_'))
@@ -91,7 +91,8 @@ char	*expand_heredoc_line(char *line, t_shell *shell, t_heredoc_error *err)
 		while (*line && *line != '$')
 			line++;
 		chunk = ft_substr(start, 0, line - start);
-		if (!chunk || !(tmp = ft_strjoin(result, chunk)))
+		tmp = ft_strjoin(result, chunk);
+		if (!chunk || !tmp)
 			return (free(chunk), free(result),
 				err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, NULL);
 		free(result);

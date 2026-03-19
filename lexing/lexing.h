@@ -6,7 +6,7 @@
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 17:59:45 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/14 17:59:52 by jlabrous         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:10:44 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	append_token(t_token **head, t_token *token);
 
 typedef struct s_segment_data
 {
-	char			*start;
+	const char			*start;
 	size_t			len;
 	t_quote_type	quote;
 }	t_segment_data;
@@ -102,10 +102,10 @@ int		new_operator_token(t_operator_type operator, t_token **token,
 
 /* --- SCAN --- */
 
-int	scan_unquoted_segment(const char **input, t_segment **segments,
-	t_lex_error *err);
-int	scan_quoted_segment(const char **input, t_segment **segments,
-	t_lex_error *err);
+int		scan_unquoted_segment(const char **input, t_segment **segments,
+			t_lex_error *err);
+int		scan_quoted_segment(const char **input, t_segment **segments,
+			t_lex_error *err);
 
 /* --- LEXER --- */
 

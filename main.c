@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/19 04:28:21 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/19 04:28:22 by jlabrous         ###   ########.fr       */
+/*   Created: 2026/03/19 20:49:18 by jlabrous          #+#    #+#             */
+/*   Updated: 2026/03/19 20:49:19 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static int	handle_parse(t_token *tokens, t_command **commands, t_shell *shell)
 			print_parse_error(err.unexpected);
 		else
 			perror("minishell");
-		free_tokens(tokens);
 		shell->last_status = 2;
 		return (1);
 	}
@@ -58,6 +57,7 @@ static int	handle_collect(t_command *commands, t_shell *shell)
 	if (collect_heredocs(commands, shell, &err))
 	{
 		perror("minishell");
+		free_commands(commands);
 		shell->last_status = 1;
 		return (1);
 	}
@@ -65,6 +65,7 @@ static int	handle_collect(t_command *commands, t_shell *shell)
 	{
 		shell->last_status = 130;
 		g_signal = 0;
+		free_commands(commands);
 		return (1);
 	}
 	return (0);
@@ -82,8 +83,7 @@ static int	handle_line(char *line, t_shell *shell)
 	if (handle_parse(tokens, &commands, shell))
 		return (free_tokens(tokens), 1);
 	if (handle_collect(commands, shell))
-		return (free_commands(commands), free_tokens(tokens), 1);
-	/* expansions + execution */
+		return (free_tokens(tokens), 1);
 	free_commands(commands);
 	free_tokens(tokens);
 	return (0);
@@ -104,6 +104,8 @@ int	main(void)
 		{
 			shell.last_status = 130;
 			g_signal = 0;
+			free(line);
+			continue ;
 		}
 		if (line == NULL)
 			return (write(1, "exit\n", 5), shell.last_status);
@@ -115,10 +117,3 @@ int	main(void)
 		free(line);
 	}
 }
-
-// cc -Wall -Wextra -Werror \
-// main.c signals.c utils.c \
-// heredoc/collect.c heredoc/expand.c heredoc/next_fd.c heredoc/read.c \
-// lexing/append.c lexing/error.c lexing/free.c lexing/lexer.c lexing/new.c lexing/scan.c \
-// parsing/append.c parsing/error.c parsing/free.c parsing/new.c parsing/parser.c \
-// -lreadline -o minishell 
