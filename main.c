@@ -51,15 +51,13 @@ static int	handle_parse(t_token *tokens, t_command **commands, t_shell *shell)
 	return (0);
 }
 
-static int	handle_collect(t_token *tokens, t_command *commands, t_shell *shell)
+static int	handle_collect(t_command *commands, t_shell *shell)
 {
 	t_heredoc_error	err;
 
 	if (collect_heredocs(commands, shell, &err))
 	{
 		perror("minishell");
-		free_commands(commands);
-		free_tokens(tokens);
 		shell->last_status = 1;
 		return (1);
 	}
@@ -67,8 +65,6 @@ static int	handle_collect(t_token *tokens, t_command *commands, t_shell *shell)
 	{
 		shell->last_status = 130;
 		g_signal = 0;
-		free_commands(commands);
-		free_tokens(tokens);
 		return (1);
 	}
 	return (0);
@@ -84,9 +80,9 @@ static int	handle_line(char *line, t_shell *shell)
 	if (handle_lex(line, &tokens, shell))
 		return (1);
 	if (handle_parse(tokens, &commands, shell))
-		return (1);
-	if (handle_collect(tokens, commands, shell))
-		return (1);
+		return (free_tokens(tokens), 1);
+	if (handle_collect(commands, shell))
+		return (free_commands(commands), free_tokens(tokens), 1);
 	/* expansions + execution */
 	free_commands(commands);
 	free_tokens(tokens);
@@ -119,3 +115,10 @@ int	main(void)
 		free(line);
 	}
 }
+
+// cc -Wall -Wextra -Werror \
+// main.c signals.c utils.c \
+// heredoc/collect.c heredoc/expand.c heredoc/next_fd.c heredoc/read.c \
+// lexing/append.c lexing/error.c lexing/free.c lexing/lexer.c lexing/new.c lexing/scan.c \
+// parsing/append.c parsing/error.c parsing/free.c parsing/new.c parsing/parser.c \
+// -lreadline -o minishell 
