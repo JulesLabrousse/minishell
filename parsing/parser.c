@@ -26,10 +26,10 @@ int	parse_word(t_token **current, t_arg **args, t_parse_error *err)
 	return (0);
 }
 
-int	parse_redirections(t_token **current, t_redir **redirs, t_parse_error *err)
+int	parse_redirections(t_token **current, t_parse_redir **redirs, t_parse_error *err)
 {
 	t_segment	*segments;
-	t_redir		*redir;
+	t_parse_redir		*redir;
 
 	if ((*current)->next == NULL)
 		return (err->type = PARSE_ERR_SYNTAX,
@@ -59,11 +59,11 @@ int	parse_pipe(t_token **current, t_parse_error *err)
 	return (0);
 }
 
-int	parser(t_token *tokens, t_command **commands, t_parse_error *err)
+int	parser(t_token *tokens, t_parse_command **commands, t_parse_error *err)
 {
 	t_token		*current;
-	t_command	*command;
-	t_redir		*redirs;
+	t_parse_command	*command;
+	t_parse_redir		*redirs;
 	t_arg		*args;
 
 	*commands = NULL;

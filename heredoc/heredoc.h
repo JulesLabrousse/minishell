@@ -39,7 +39,7 @@ typedef struct s_heredoc_ctx
 
 /* --- COLLECT --- */
 
-int		collect_heredocs(t_command *commands, t_shell *shell,
+int		collect_heredocs(t_parse_command *commands, t_shell *shell,
 			t_heredoc_error *err);
 
 /* --- READ --- */

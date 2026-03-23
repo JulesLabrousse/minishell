@@ -30,9 +30,9 @@ void	append_arg(t_arg **head, t_arg *arg)
 	current->next = arg;
 }
 
-void	append_redir(t_redir **head, t_redir *redir)
+void	append_redir(t_parse_redir **head, t_parse_redir *redir)
 {
-	t_redir	*current;
+	t_parse_redir	*current;
 
 	if (!head || !redir)
 		return ;
@@ -48,9 +48,9 @@ void	append_redir(t_redir **head, t_redir *redir)
 	current->next = redir;
 }
 
-void	append_command(t_command **head, t_command *command)
+void	append_command(t_parse_command **head, t_parse_command *command)
 {
-	t_command	*current;
+	t_parse_command	*current;
 
 	if (!head || !command)
 		return ;

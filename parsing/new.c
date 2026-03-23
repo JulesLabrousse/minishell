@@ -27,11 +27,11 @@ int	new_arg(t_segment *segments, t_arg **arg, t_parse_error *err)
 	return (0);
 }
 
-int	new_redir(t_operator_type type, t_segment *segments, t_redir **redir,
+int	new_redir(t_operator_type type, t_segment *segments, t_parse_redir **redir,
 		t_parse_error *err)
 {
 	*redir = NULL;
-	*redir = malloc(sizeof(t_redir));
+	*redir = malloc(sizeof(t_parse_redir));
 	if (!*redir)
 	{
 		err->type = PARSE_ERR_NOMEM;
@@ -50,11 +50,11 @@ int	new_redir(t_operator_type type, t_segment *segments, t_redir **redir,
 	return (0);
 }
 
-int	new_command(t_redir *redirs, t_arg *args, t_command **command,
+int	new_command(t_parse_redir *redirs, t_arg *args, t_parse_command **command,
 		t_parse_error *err)
 {
 	*command = NULL;
-	*command = malloc(sizeof(t_command));
+	*command = malloc(sizeof(t_parse_command));
 	if (!*command)
 	{
 		err->type = PARSE_ERR_NOMEM;

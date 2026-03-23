@@ -44,7 +44,7 @@ static int	delim_to_str(t_segment *segments, char **result,
 	return (0);
 }
 
-static int	collect_heredoc(t_redir *redir, t_shell *shell,
+static int	collect_heredoc(t_parse_redir *redir, t_shell *shell,
 	t_heredoc_error *err)
 {
 	t_heredoc_ctx	ctx;
@@ -62,9 +62,9 @@ static int	collect_heredoc(t_redir *redir, t_shell *shell,
 	return (0);
 }
 
-int	collect_heredocs(t_command *commands, t_shell *shell, t_heredoc_error *err)
+int	collect_heredocs(t_parse_command *commands, t_shell *shell, t_heredoc_error *err)
 {
-	t_redir	*redir;
+	t_parse_redir	*redir;
 
 	setup_heredoc_signals();
 	while (commands && g_signal == 0)

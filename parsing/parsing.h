@@ -24,7 +24,7 @@ typedef struct s_heredoc
 	int			fd;
 }	t_heredoc;
 
-typedef struct s_redir
+typedef struct s_parse_redir
 {
 	t_operator_type	type;
 	union
@@ -32,8 +32,8 @@ typedef struct s_redir
 		t_segment	*target;
 		t_heredoc	heredoc;
 	};
-	struct s_redir	*next;
-}	t_redir;
+	struct s_parse_redir	*next;
+}	t_parse_redir;
 
 typedef struct s_arg
 {
@@ -41,12 +41,12 @@ typedef struct s_arg
 	struct s_arg	*next;
 }	t_arg;
 
-typedef struct s_command
+typedef struct s_parse_command
 {
-	t_redir				*redirs;
+	t_parse_redir		*redirs;
 	t_arg				*args;
-	struct s_command	*next;
-}	t_command;
+	struct s_parse_command	*next;
+}	t_parse_command;
 
 typedef enum e_unexpected_token
 {
@@ -77,30 +77,30 @@ typedef struct s_parse_error
 /* --- FREE --- */
 
 void	free_args(t_arg *current);
-void	free_redirs(t_redir *current);
-void	free_commands(t_command *current);
+void	free_redirs(t_parse_redir *current);
+void	free_commands(t_parse_command *current);
 
 /* --- APPEND --- */
 
 void	append_arg(t_arg **head, t_arg *arg);
-void	append_redir(t_redir **head, t_redir *redir);
-void	append_command(t_command **head, t_command *command);
+void	append_redir(t_parse_redir **head, t_parse_redir *redir);
+void	append_command(t_parse_command **head, t_parse_command *command);
 
 /* --- NEW --- */
 
 int		new_arg(t_segment *segments, t_arg **arg, t_parse_error *err);
-int		new_redir(t_operator_type type, t_segment *segments, t_redir **redir,
+int		new_redir(t_operator_type type, t_segment *segments, t_parse_redir **redir,
 			t_parse_error *err);
-int		new_command(t_redir *redirs, t_arg *args, t_command **command,
+int		new_command(t_parse_redir *redirs, t_arg *args, t_parse_command **command,
 			t_parse_error *err);
 
 /* --- PARSER --- */
 
 int		parse_word(t_token **current, t_arg **args, t_parse_error *err);
-int		parse_redirections(t_token **current, t_redir **redirs,
+int		parse_redirections(t_token **current, t_parse_redir **redirs,
 			t_parse_error *err);
 int		parse_pipe(t_token **current, t_parse_error *err);
-int		parser(t_token *tokens, t_command **commands, t_parse_error *err);
+int		parser(t_token *tokens, t_parse_command **commands, t_parse_error *err);
 
 /* --- ERROR --- */
 
