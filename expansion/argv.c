@@ -5,12 +5,26 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/23 22:07:13 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/23 22:08:49 by jlabrous         ###   ########.fr       */
+/*   Created: 2026/03/23 23:22:41 by jlabrous          #+#    #+#             */
+/*   Updated: 2026/03/23 23:22:43 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
+
+static int	word_commit(char ***words, char **current, bool has_quoted,
+		t_expand_error *err)
+{
+	if ((*current)[0] || has_quoted)
+	{
+		if (words_append(words, *current, err))
+			return (free(*current), *current = NULL, 1);
+		return (0);
+	}
+	free(*current);
+	*current = NULL;
+	return (0);
+}
 
 int	expand_word(t_segment *segs, char ***words, t_shell *shell,
 		t_expand_error *err)
@@ -33,14 +47,7 @@ int	expand_word(t_segment *segs, char ***words, t_shell *shell,
 			return (free(current), 1);
 		segs = segs->next;
 	}
-	if (current[0] || has_quoted)
-	{
-		if (words_append(words, current, err))
-			return (free(current), 1);
-	}
-	else
-		free(current);
-	return (0);
+	return (word_commit(words, &current, has_quoted, err));
 }
 
 int	expand_argv(t_arg *args, char ***argv, t_shell *shell, t_expand_error *err)

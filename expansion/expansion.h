@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/23 22:05:23 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/23 22:05:24 by jlabrous         ###   ########.fr       */
+/*   Created: 2026/03/23 15:00:00 by jlabrous          #+#    #+#             */
+/*   Updated: 2026/03/23 23:21:33 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_wctx
 
 /* --- FREE --- */
 
+void	free_words(char **words);
 void	free_exp_redirs(t_exp_redir *current);
 void	free_exp_commands(t_exp_command *current);
 
@@ -69,10 +70,7 @@ int		new_exp_command(char **argv, t_exp_redir *redirs,
 
 /* --- WORDS --- */
 
-void	free_words(char **words);
-int		words_count(char **words);
 int		words_append(char ***words, char *word, t_expand_error *err);
-int		words_flush(char ***words, char **current, t_expand_error *err);
 int		words_split(t_wctx *ctx, const char *text, t_expand_error *err);
 
 /* --- TEXT --- */

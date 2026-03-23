@@ -5,48 +5,104 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabrous <jlabrous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/23 22:18:12 by jlabrous          #+#    #+#             */
-/*   Updated: 2026/03/23 22:18:13 by jlabrous         ###   ########.fr       */
+/*   Created: 2026/03/23 23:30:28 by jlabrous          #+#    #+#             */
+/*   Updated: 2026/03/23 23:30:29 by jlabrous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "expansion.h"
+#include "heredoc.h"
 
-int	expand_command(t_parse_command *in, t_exp_command **out,
-		t_shell *shell, t_expand_error *err)
+static int	expand_status(int status, char **result, t_heredoc_error *err)
 {
-	char		**argv;
-	t_exp_redir	*redirs;
+	char	*str;
+	char	*tmp;
 
-	argv = NULL;
-	redirs = NULL;
-	if (expand_argv(in->args, &argv, shell, err))
-		return (1);
-	if (expand_redirs(in->redirs, &redirs, shell, err))
-		return (free_words(argv), 1);
-	if (new_exp_command(argv, redirs, out, err))
-		return (free_words(argv), free_exp_redirs(redirs), 1);
+	str = ft_itoa(status);
+	if (!str)
+		return (err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, 1);
+	tmp = ft_strjoin(*result, str);
+	free(str);
+	if (!tmp)
+		return (err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, 1);
+	free(*result);
+	*result = tmp;
 	return (0);
 }
 
-int	expand(t_parse_command *in, t_exp_command **out,
-		t_shell *shell, t_expand_error *err)
+static int	expand_var(char **pos, t_shell *shell, char **result,
+		t_heredoc_error *err)
 {
-	t_exp_command	*cmd;
-	t_exp_command	*tail;
+	char	*start;
+	char	*name;
+	char	*tmp;
+	t_env	*var;
 
-	*out = NULL;
-	tail = NULL;
-	while (in)
-	{
-		if (expand_command(in, &cmd, shell, err))
-			return (free_exp_commands(*out), *out = NULL, 1);
-		if (!*out)
-			*out = cmd;
-		else
-			tail->next = cmd;
-		tail = cmd;
-		in = in->next;
-	}
+	start = *pos;
+	while (**pos && (ft_isalnum(**pos) || **pos == '_'))
+		(*pos)++;
+	name = ft_substr(start, 0, *pos - start);
+	if (!name)
+		return (err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, 1);
+	var = shell->vars;
+	while (var && ft_strncmp(var->name, name, ft_strlen(name) + 1))
+		var = var->next;
+	free(name);
+	if (!var || !var->value)
+		return (0);
+	tmp = ft_strjoin(*result, var->value);
+	if (!tmp)
+		return (err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, 1);
+	free(*result);
+	*result = tmp;
 	return (0);
+}
+
+static int	expand_dollar(char **pos, t_shell *shell, char **result,
+		t_heredoc_error *err)
+{
+	char	*tmp;
+
+	(*pos)++;
+	if (**pos == '?')
+		return ((*pos)++, expand_status(shell->last_status, result, err));
+	if (**pos != '\0' && (ft_isalnum(**pos) || **pos == '_'))
+		return (expand_var(pos, shell, result, err));
+	tmp = ft_strjoin(*result, "$");
+	if (!tmp)
+		return (err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, 1);
+	free(*result);
+	*result = tmp;
+	return (0);
+}
+
+char	*expand_heredoc_line(char *line, t_shell *shell, t_heredoc_error *err)
+{
+	char	*result;
+	char	*start;
+	char	*chunk;
+	char	*tmp;
+
+	result = ft_strdup("");
+	if (!result)
+		return (err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, NULL);
+	while (*line)
+	{
+		start = line;
+		while (*line && *line != '$')
+			line++;
+		chunk = ft_substr(start, 0, line - start);
+		if (!chunk)
+			return (free(result),
+				err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, NULL);
+		tmp = ft_strjoin(result, chunk);
+		free(chunk);
+		if (!tmp)
+			return (free(result),
+				err->type = HEREDOC_ERR_NOMEM, err->saved_errno = errno, NULL);
+		free(result);
+		result = tmp;
+		if (*line == '$' && expand_dollar(&line, shell, &result, err))
+			return (free(result), NULL);
+	}
+	return (result);
 }
